@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 
 const Sidebar = () => {
   const queryClient = useQueryClient();
-
+  
   const { mutate: logout } = useMutation({
     mutationFn: async () => {
       try {
@@ -18,22 +18,21 @@ const Sidebar = () => {
           method: "POST",
         });
         const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Failed to login");
-        return data;
+
+        if (!res.ok) {
+          throw new Error(data.error || "Something went wrong");
+        }
       } catch (error) {
-        console.error("Error in login mutation: ", error);
-        throw error;
+        throw new Error(error);
       }
     },
     onSuccess: () => {
-      // toast.success("Logout successful");
       queryClient.invalidateQueries({ queryKey: ["authUser"] });
     },
     onError: () => {
       toast.error("Logout failed");
     },
   });
-
   const { data: authUser } = useQuery({
     queryKey: ["authUser"],
   });
