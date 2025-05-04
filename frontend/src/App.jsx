@@ -2,13 +2,13 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import HomePage from "./pages/home/HomePage";
 import SignUpPage from "./pages/auth/signup/SignUpPage";
 import LoginPage from "./pages//auth/login/LoginPage";
-import Sidebar from "./components/common/SideBar";
 import RightPanel from "./components/common/RightPanel";
 import NotificationPage from "./pages/notification/NotificationPage";
 import ProfilePage from "./pages/profile/ProfilePage";
 import { Toaster } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import LoadingSpinner from "./components/common/LoadingSpinner";
+import Sidebar from "./components/common/Sidebar";
 
 function App() {
   const { data: authUser, isLoading } = useQuery({
