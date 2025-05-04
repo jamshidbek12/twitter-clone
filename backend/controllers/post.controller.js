@@ -11,17 +11,18 @@ export const createPost = async (req, res) => {
 
     const user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(404).json({ message: "User not found" });
     }
 
     if (!text && !img) {
       return res.status(400).json({ error: "Please must have text or image" });
     }
 
-    if (img) {
-      const uploadedResponse = await cloudinary.uploader.upload(img);
-      img = uploadedResponse.secure_url;
-    }
+    // if (img) {
+    //   console.log("img length:", img.length); // qo‘shing!
+    //   const uploadedResponse = await cloudinary.uploader.upload(img);
+    //   img = uploadedResponse.secure_url;
+    // }
 
     const newPost = new Post({
       user: userId,
@@ -31,7 +32,7 @@ export const createPost = async (req, res) => {
     await newPost.save();
     res.status(201).json(newPost);
   } catch (error) {
-    console.error("Error in createPost controller: ", error.message);
+    console.error("Error in createPost controller: ", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
@@ -49,10 +50,10 @@ export const deletePost = async (req, res) => {
         .json({ error: "Unauthorized to delete this post" });
     }
 
-    if (post.img) {
-      const imgId = post.img.split("/").pop().split(".")[0];
-      await cloudinary.uploader.destroy(imgId);
-    }
+    // if (post.img) {
+    //   const imgId = post.img.split("/").pop().split(".")[0];
+    //   await cloudinary.uploader.destroy(imgId);
+    // }
 
     await Post.findByIdAndDelete(req.params.id);
     res.status(200).json({ message: "Post deleted successfully" });

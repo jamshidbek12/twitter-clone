@@ -16,17 +16,31 @@ const Post = ({ post }) => {
 
   const queryClient = useQueryClient();
 
-  const { data: authUser } = useQuery({ queryKey: ["authUser"] });
+  const { data: authUser } = useQuery({
+    queryKey: ["authUser"],
+    queryFn: async () => {
+      const res = await fetch("/api/auth/me");
+      if (!res.ok) {
+        throw new Error("Failed to fetch user");
+      }
+      return res.json();
+    },
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
   const { mutate: deletePost, isPending } = useMutation({
     mutationFn: async () => {
-      const res = await fetch(`/api/posts/${post._id}`, {
-        method: "DELETE",
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Something went wrong");
+      try {
+        const res = await fetch(`/api/posts/${post._id}`, {
+          method: "DELETE",
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.error || "Something went wrong");
+        }
+        return data;
+      } catch (error) {
+        throw new Error(error);
       }
-      return data;
     },
     onSuccess: () => {
       toast.success("Post deleted successfully");

@@ -21,7 +21,8 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 8000;
 
-app.use(express.json());
+app.use(express.json({ limit: "5mb" }));
+// Limit shouldn't be too large to prevent DOS attacks
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cookieParser());

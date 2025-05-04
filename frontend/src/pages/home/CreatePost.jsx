@@ -10,7 +10,17 @@ const CreatePost = () => {
   const [img, setImg] = useState(null);
   const imgRef = useRef(null);
 
-  const { data: authUser } = useQuery({ queryKey: ["authUser"] });
+  const { data: authUser } = useQuery({
+    queryKey: ["authUser"],
+    queryFn: async () => {
+      const res = await fetch("/api/auth/me");
+      if (!res.ok) {
+        throw new Error("Failed to fetch user");
+      }
+      return res.json();
+    },
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
   const queryClient = useQueryClient();
 
   const {
@@ -30,11 +40,11 @@ const CreatePost = () => {
         });
         const data = await res.json();
         if (!res.ok) {
-          throw new Error(data.message || "Something went wrong");
+          throw new Error(data.error || "Something went wrong");
         }
         return data;
       } catch (error) {
-        throw new Error("Something went wrong", error.message);
+        throw new Error(error);
       }
     },
     onSuccess: () => {
