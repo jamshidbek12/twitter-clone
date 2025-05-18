@@ -15,14 +15,6 @@ const Post = ({ post }) => {
   const [comment, setComment] = useState("");
   const postOwner = post.user;
 
-  const isLiked = post.likes.includes(authUser._id);
-
-  const isMyPost = authUser._id === post.user._id;
-
-  const formattedDate = formatPostDate(post.createdAt);
-
-  const queryClient = useQueryClient();
-
   const { data: authUser } = useQuery({
     queryKey: ["authUser"],
     queryFn: async () => {
@@ -116,6 +108,14 @@ const Post = ({ post }) => {
       toast.error(error.message);
     },
   });
+
+  const isLiked = post.likes.includes(authUser._id);
+
+  const isMyPost = authUser._id === post.user._id;
+
+  const formattedDate = formatPostDate(post.createdAt);
+
+  const queryClient = useQueryClient();
 
   const handleDeletePost = () => {
     deletePost();
