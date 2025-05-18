@@ -35,13 +35,6 @@ const Sidebar = () => {
   });
   const { data: authUser } = useQuery({
     queryKey: ["authUser"],
-    queryFn: async () => {
-      const res = await fetch("/api/auth/me");
-      if (!res.ok) {
-        throw new Error("Failed to fetch user");
-      }
-      return res.json();
-    },
   });
 
   return (
