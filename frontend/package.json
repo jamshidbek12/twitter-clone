@@ -13,6 +13,7 @@
     "@tailwindcss/vite": "^4.0.11",
     "@tanstack/react-query": "^5.74.3",
     "daisyui": "^5.0.0",
+    "intermediate_site": "file:..",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hot-toast": "^2.5.2",
